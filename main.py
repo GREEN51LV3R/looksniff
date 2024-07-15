@@ -173,7 +173,7 @@ def sniffm():
               ║╚╣║║║║═╬╗╚╣║║║║╔╣╔╝
               ╚═╩═╩═╩╩╩══╩╩═╩╩╝╚╝═""")
     print(f"{Fore.BLUE} Welcome To LOOKSNIFF Packet Sniffer{Style.RESET_ALL}")
-    print(f"{Fore.MAGENTA}[***] Please Start ARP Spoofer Before Using this Module [***] {Style.RESET_ALL}")
+    
 
     global choice, log_choice, alert_choice, protocols
     try:
