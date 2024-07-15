@@ -10,6 +10,10 @@ LOOKSNIFF is a packet sniffer written in Python that captures network packets an
 - Option to receive email and desktop notifications for sensitive information.
 - Display network interfaces and their IP/MAC addresses.
 
+## Warning
+
+**This tool is intended for educational purposes only. Unauthorized use of this tool to monitor network traffic without permission is illegal and unethical. The author is not responsible for any damage caused by the use or misuse of this tool. Use at your own risk.** 
+
 ## Requirements
 
 - Python `3.x`
