@@ -1,0 +1,6 @@
+colorama
+scapy
+psutil
+prettytable
+matplotlib
+plyer
