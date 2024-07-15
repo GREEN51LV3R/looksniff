@@ -1,4 +1,3 @@
-
 import time
 from colorama import Fore, Style
 import scapy.all
@@ -15,19 +14,16 @@ from email.mime.text import MIMEText
 from plyer import notification
 
 choice = "Y"
-alert_choice = "N"
-protocols = []
-
-# log file
 log_choice = "N"
+alert_choice = "N"
 log_file = "packet_logs.txt"
+protocols = []
 
 def write_to_log(data):
     if log_choice == "Y":
         with open(log_file, "a") as f:
             f.write(data + "\n")
 
-# message
 def send_email_alert(message):
     try:
         from_address = "your_email@example.com"
@@ -50,11 +46,9 @@ def send_desktop_notification(message):
     notification.notify(
         title="Sensitive Information Detected",
         message=message,
-        timeout=7
+        timeout=5
     )
 
-
-# mac address
 def mac_address(interface):
     try:
         mac_out = subprocess.check_output(["ifconfig", interface], stderr=subprocess.STDOUT)
@@ -68,7 +62,6 @@ def mac_address(interface):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-# ip-address
 def ip_address(interface):
     try:
         ip_out = subprocess.check_output(["ifconfig", interface], stderr=subprocess.STDOUT)
@@ -82,13 +75,11 @@ def ip_address(interface):
     except subprocess.CalledProcessError as e:
         print(f"Failed to execute ifconfig {e.output.decode()}")
     except Exception as e:
-        print(f"Error occureed {e}")
+        print(f"Error occurred {e}")
 
-# ip-table
 def ip_table():
     address = psutil.net_if_addrs()
     p = PrettyTable([f'{Fore.GREEN}Interface', 'Mac Address', f'Ip Address{Style.RESET_ALL}'])
-    # interface loop
     for b, c in address.items():
         mac = mac_address(b)
         ip = ip_address(b)
@@ -104,10 +95,9 @@ def sniff(interface):
     filters = " or ".join(protocols)
     scapy.all.sniff(iface=interface, store=False, prn=psniffed_packet, filter=filters)
 
-# process packets
 def psniffed_packet(packet):
     if packet.haslayer(http.HTTPRequest):
-        log_entry = "[++] HTTP request <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        log_entry = "[++] HTTP request <<<<<<<"
         print(log_entry)
         write_to_log(log_entry)
         url_extractor(packet)
@@ -122,8 +112,6 @@ def psniffed_packet(packet):
         if choice == "Y" or choice == "y":
             raw_request(packet)
 
-
-# login information
 def user_login_info(packet):
     if packet.haslayer(scapy.all.Raw):
         load = packet[scapy.all.Raw].load
@@ -137,8 +125,6 @@ def user_login_info(packet):
                 return load_decode
     return None
 
-
-# url extractor
 def url_extractor(packet):
     try:
         http_layer = packet.getlayer(HTTPRequest)
@@ -148,7 +134,8 @@ def url_extractor(packet):
             method = http_layer.fields.get('Method', b'').decode()
             host = http_layer.fields.get('Host', b'').decode()
             path = http_layer.fields.get('Path', b'').decode()
-            log_entry = f"{src_ip} just requested {method}{host}{path}"
+
+            log_entry = f"{src_ip} just requested {method} {host} {path}"
             print(log_entry)
             write_to_log(log_entry)
     except AttributeError:
@@ -160,13 +147,10 @@ def url_extractor(packet):
         print(log_entry)
         write_to_log(log_entry)
 
-
-
-# raw (http) request
 def raw_request(packet):
     httpl = packet[HTTPRequest].fields
 
-    print("-----------------***Raw HTTP Packet***----------------------------------------------------------------")
+    print("-----------------***Raw HTTP Packet***-------------------")
     print("{:<40} {:<15}".format('Key', 'Label'))
 
     try:
@@ -181,9 +165,8 @@ def raw_request(packet):
     except KeyboardInterrupt:
         print("\n[+] Quitting Program...")
 
-    print("--------------------------------------------------------------------------------------------------------")
+    print("---------------------------------------------------------")
 
-# sniff
 def sniffm():
     print(r"""
               ╔╗╔═╦═╦╦╦══╦═╦╦╦═╦═╗
@@ -211,4 +194,3 @@ def sniffm():
         time.sleep(3)
 
 sniffm()
-
