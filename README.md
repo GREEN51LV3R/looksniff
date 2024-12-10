@@ -25,7 +25,7 @@ LOOKSNIFF is a packet sniffer written in Python that captures network packets an
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourusername/looksniff.git
+    git clone https://github.com/GREEN51LV3R/looksniff.git
     cd looksniff
     ```
 
